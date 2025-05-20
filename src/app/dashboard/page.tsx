@@ -1,7 +1,8 @@
-import LogoutButton from '@/components/LogoutButton';
 import { getAuthUser } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
 import { AddWorkout } from '@/components/AddWorkout';
+import { SeeWorkouts } from '@/components/SeeWorkouts';
+import { ProgressCheck } from '@/components/ProgressCheck';
 
 export default async function DashboardPage() {
   const user = await getAuthUser();
@@ -11,21 +12,27 @@ export default async function DashboardPage() {
   }
 
   return (
-    <main className="w-screen h-screen bg-stone-50">
-      <div className="py-20">
-        <h1 className="flex justify-center items-center text-shadow-lg">
-          Welcome back,
-          <span className="text-rose-600 text-shadow-lg ml-3">
-            {user.username}!
-          </span>
-        </h1>
-        <div className="flex space-x-6 justify-center gap-2 mt-10">
-          <AddWorkout />
-          {/* <LogoutButton /> */}
+    <main className="flex justify-center items-center w-screen h-screen bg-zinc-50">
+      <section className="flex flex-col items-center">
+        <div className="w-fit h-fit mt-12 shadow-lg rounded-2xl bg-white px-12 py-8">
+          <div>
+            <h1 className="w-full text-shadow-lg">
+              Welcome,
+              <span className="text-rose-500 text-shadow-lg ml-3">
+                {user.username}!
+              </span>
+            </h1>
+          </div>
+
+          <p className="flex justify-center mt-4">Select one option:</p>
+
+          <div className="flex flex-col items-center gap-8 mt-8 mb-6">
+            <AddWorkout />
+            <SeeWorkouts />
+            <ProgressCheck />
+          </div>
         </div>
-        {/* Create a New Workout box option */}
-        {/* See all the workouts you've created below */}
-      </div>
+      </section>
     </main>
   );
 }

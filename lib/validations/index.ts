@@ -3,8 +3,17 @@ import { z } from 'zod';
 // Workout validation
 export const WorkoutSchema = z.object({
   title: z.string().min(1, 'Workout title is required'),
-  exercises: z.array(z.string()).nonempty('At least one exercise is required.'),
+  exercises: z
+    .array(
+      z.object({
+        name: z.string().min(1, 'Exercise name is required'),
+        sets: z.string().min(1, 'Sets required'),
+        reps: z.string().min(1, 'Reps required'),
+      })
+    )
+    .nonempty('At least one exercise is required.'),
 });
+
 export type WorkoutInput = z.infer<typeof WorkoutSchema>;
 
 // Creating an Account

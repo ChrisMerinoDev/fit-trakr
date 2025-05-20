@@ -3,6 +3,8 @@ import dbConnect from '../../../../../lib/mongoose';
 import Workout from '../../../../../models/workout.model';
 import { WorkoutSchema } from '../../../../../lib/validations';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/workouts/[id]
 export async function GET(
   req: NextRequest,
@@ -10,8 +12,9 @@ export async function GET(
 ) {
   try {
     await dbConnect();
+    const { id } = await params;
 
-    const workout = await Workout.findById(params.id);
+    const workout = await Workout.findById(id);
 
     if (!workout) {
       return NextResponse.json({ error: 'Workout not found' }, { status: 404 });
@@ -19,7 +22,7 @@ export async function GET(
 
     return NextResponse.json({ workout });
   } catch (error) {
-    console.error('Failed to fetch workout:', error);
+    console.error(error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
@@ -30,6 +33,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const { id } = params;
     const body = await req.json();
     const parsed = WorkoutSchema.safeParse(body);
 
@@ -43,7 +47,7 @@ export async function PUT(
     await dbConnect();
 
     const updatedWorkout = await Workout.findByIdAndUpdate(
-      params.id,
+      id,
       { ...parsed.data },
       { new: true }
     );
@@ -69,8 +73,9 @@ export async function DELETE(
 ) {
   try {
     await dbConnect();
+    const { id } = await params;
 
-    const deleted = await Workout.findByIdAndDelete(params.id);
+    const deleted = await Workout.findByIdAndDelete(id);
 
     if (!deleted) {
       return NextResponse.json({ error: 'Workout not found' }, { status: 404 });
