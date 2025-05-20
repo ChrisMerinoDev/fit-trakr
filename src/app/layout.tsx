@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Fit-Trakr',
   description: 'Build your own workouts & track your progress in real-time.',
+  icons: {
+    icon: '/Icons/Exercise.svg',
+  },
 };
 
 export default function RootLayout({

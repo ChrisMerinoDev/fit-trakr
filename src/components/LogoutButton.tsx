@@ -13,7 +13,7 @@ export default function LogoutButton() {
 
     if (res.ok) {
       localStorage.removeItem('token');
-      router.push('/login');
+      router.push('/');
       toast.success('Logged out successfully!');
     } else {
       toast.error('Logout failed. Please try again.');
@@ -21,7 +21,7 @@ export default function LogoutButton() {
   };
 
   return (
-    <button className="button" onClick={handleLogout}>
+    <button className="logout-button" onClick={handleLogout}>
       Logout
     </button>
   );

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { AddWorkout } from '@/components/AddWorkout';
 import { SeeWorkouts } from '@/components/SeeWorkouts';
 import { ProgressCheck } from '@/components/ProgressCheck';
+import LogoutButton from '@/components/LogoutButton';
 
 export default async function DashboardPage() {
   const user = await getAuthUser();
@@ -30,6 +31,7 @@ export default async function DashboardPage() {
             <AddWorkout />
             <SeeWorkouts />
             <ProgressCheck />
+            <LogoutButton />
           </div>
         </div>
       </section>
