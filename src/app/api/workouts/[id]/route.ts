@@ -3,14 +3,13 @@ import dbConnect from '../../../../../lib/mongoose';
 import Workout from '../../../../../models/workout.model';
 import { WorkoutSchema } from '../../../../../lib/validations';
 import { getAuthUser } from '../../../../../lib/auth';
-import { APIProps } from '@/types';
+import { APIParams } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
 // GET /api/workouts/[id]
-export async function GET(req: NextRequest, { params }: APIProps) {
-  const resolvedParams = await params;
-  const id = resolvedParams.params.id;
+export async function GET(req: NextRequest, { params }: APIParams) {
+  const id = params.id;
 
   try {
     await dbConnect();
@@ -37,9 +36,8 @@ export async function GET(req: NextRequest, { params }: APIProps) {
 }
 
 // PUT /api/workouts/[id]
-export async function PUT(req: NextRequest, { params }: APIProps) {
-  const resolvedParams = await params;
-  const id = resolvedParams.params.id;
+export async function PUT(req: NextRequest, { params }: APIParams) {
+  const id = params.id;
 
   try {
     const user = await getAuthUser();
@@ -81,9 +79,8 @@ export async function PUT(req: NextRequest, { params }: APIProps) {
 }
 
 // DELETE /api/workouts/[id]
-export async function DELETE(req: NextRequest, { params }: APIProps) {
-  const resolvedParams = await params;
-  const id = resolvedParams.params.id;
+export async function DELETE(req: NextRequest, { params }: APIParams) {
+  const id = params.id;
 
   try {
     await dbConnect();
