@@ -3,14 +3,12 @@ import dbConnect from '../../../../../lib/mongoose';
 import Workout from '../../../../../models/workout.model';
 import { WorkoutSchema } from '../../../../../lib/validations';
 import { getAuthUser } from '../../../../../lib/auth';
-import { APIParams } from '@/types';
+import { APIProps } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
 // GET /api/workouts/[id]
-export async function GET(req: NextRequest, { params }: APIParams) {
-  const id = await params.id;
-
+export async function GET(req: NextRequest, { params }: APIProps) {
   try {
     await dbConnect();
     const user = await getAuthUser();
@@ -20,7 +18,7 @@ export async function GET(req: NextRequest, { params }: APIParams) {
     }
 
     const workout = await Workout.findOne({
-      _id: id,
+      _id: (await params).params.id,
       createdBy: user.userId,
     });
 
@@ -36,9 +34,7 @@ export async function GET(req: NextRequest, { params }: APIParams) {
 }
 
 // PUT /api/workouts/[id]
-export async function PUT(req: NextRequest, { params }: APIParams) {
-  const id = await params.id;
-
+export async function PUT(req: NextRequest, { params }: APIProps) {
   try {
     const user = await getAuthUser();
 
@@ -59,7 +55,7 @@ export async function PUT(req: NextRequest, { params }: APIParams) {
     await dbConnect();
 
     const updatedWorkout = await Workout.findOneAndUpdate(
-      { _id: id, createdBy: user.userId },
+      { _id: (await params).params.id, createdBy: user.userId },
       parsed.data,
       { new: true }
     );
@@ -79,9 +75,7 @@ export async function PUT(req: NextRequest, { params }: APIParams) {
 }
 
 // DELETE /api/workouts/[id]
-export async function DELETE(req: NextRequest, { params }: APIParams) {
-  const id = await params.id;
-
+export async function DELETE(req: NextRequest, { params }: APIProps) {
   try {
     await dbConnect();
     const user = await getAuthUser();
@@ -91,7 +85,7 @@ export async function DELETE(req: NextRequest, { params }: APIParams) {
     }
 
     const deleted = await Workout.findOneAndDelete({
-      _id: id,
+      _id: (await params).params.id,
       createdBy: user.userId,
     });
 
