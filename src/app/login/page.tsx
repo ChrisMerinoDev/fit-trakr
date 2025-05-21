@@ -43,8 +43,8 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-stone-50 flex items-center justify-center">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg px-6 py-8">
+    <main className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
         <h1 className="mb-6 text-center">Log In</h1>
 
         <form className="space-y-4" onSubmit={handleLogin}>
