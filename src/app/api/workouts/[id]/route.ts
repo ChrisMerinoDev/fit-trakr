@@ -10,6 +10,8 @@ export const dynamic = 'force-dynamic';
 // GET /api/workouts/[id]
 export async function GET(req: NextRequest, { params }: APIProps) {
   const resolvedParams = await params;
+  const id = resolvedParams.params.id;
+
   try {
     await dbConnect();
     const user = await getAuthUser();
@@ -18,7 +20,8 @@ export async function GET(req: NextRequest, { params }: APIProps) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const workout = await Workout.findOne(resolvedParams, {
+    const workout = await Workout.findOne({
+      _id: id,
       createdBy: user.userId,
     });
 
@@ -36,6 +39,8 @@ export async function GET(req: NextRequest, { params }: APIProps) {
 // PUT /api/workouts/[id]
 export async function PUT(req: NextRequest, { params }: APIProps) {
   const resolvedParams = await params;
+  const id = resolvedParams.params.id;
+
   try {
     const user = await getAuthUser();
 
@@ -56,8 +61,8 @@ export async function PUT(req: NextRequest, { params }: APIProps) {
     await dbConnect();
 
     const updatedWorkout = await Workout.findOneAndUpdate(
-      resolvedParams,
-      { ...parsed.data },
+      { _id: id, createdBy: user.userId },
+      parsed.data,
       { new: true }
     );
 
@@ -78,6 +83,8 @@ export async function PUT(req: NextRequest, { params }: APIProps) {
 // DELETE /api/workouts/[id]
 export async function DELETE(req: NextRequest, { params }: APIProps) {
   const resolvedParams = await params;
+  const id = resolvedParams.params.id;
+
   try {
     await dbConnect();
     const user = await getAuthUser();
@@ -86,7 +93,8 @@ export async function DELETE(req: NextRequest, { params }: APIProps) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const deleted = await Workout.findOneAndDelete(resolvedParams, {
+    const deleted = await Workout.findOneAndDelete({
+      _id: id,
       createdBy: user.userId,
     });
 
