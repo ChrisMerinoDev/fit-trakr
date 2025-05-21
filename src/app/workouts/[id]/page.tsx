@@ -1,47 +1,27 @@
-// app/workouts/[id]/page.tsx (Server Component)
+// (Server Component)
 import { notFound } from 'next/navigation';
 import { WorkoutDetailClient } from './WorkoutDetailClient';
+import { PageProps } from '@/types';
 
-type Workout = {
-  id: string;
-  title: string;
-  exercises: {
-    name: string;
-    sets: string;
-    reps: string;
-  }[];
-};
-
-type Params = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function WorkoutDetailPage({ params }: Params) {
-  const { id } = await params;
-
+export default async function WorkoutDetailPage({ params }: PageProps) {
+  const resolvedParams = await params;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/workouts/${id}`,
-    {
-      cache: 'no-store',
-    }
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/workouts/${resolvedParams.id}`,
+    { cache: 'no-store' }
   );
 
-  if (!res.ok) notFound();
+  if (!res.ok) return notFound();
 
   const data = await res.json();
-  const workout: Workout = {
-    id: data.workout._id, // ✅ map _id to id
+  const workout = {
+    id: data.workout._id,
     title: data.workout.title,
     exercises: data.workout.exercises,
   };
 
   return (
     <div>
-      <div>
-        <WorkoutDetailClient workout={workout} />
-      </div>
+      <WorkoutDetailClient workout={workout} />
     </div>
   );
 }

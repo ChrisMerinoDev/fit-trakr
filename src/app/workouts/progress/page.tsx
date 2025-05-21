@@ -1,8 +1,6 @@
 import React from 'react';
-import { ProgressSummary } from '../ProgressSummary';
+import ProgressSummary from '../ProgressSummary';
 
-export const ProgressPage = () => {
+export default function ProgressPage() {
   return <ProgressSummary />;
-};
-
-export default ProgressPage;
+}

@@ -6,13 +6,10 @@ import { WorkoutSchema } from '../../../../../lib/validations';
 export const dynamic = 'force-dynamic';
 
 // GET /api/workouts/[id]
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: NextRequest, context: unknown) {
+  const { id } = (context as { params: { id: string } }).params;
   try {
     await dbConnect();
-    const { id } = await params;
 
     const workout = await Workout.findById(id);
 
@@ -28,12 +25,9 @@ export async function GET(
 }
 
 // PUT /api/workouts/[id]
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, context: unknown) {
+  const { id } = (context as { params: { id: string } }).params;
   try {
-    const { id } = params;
     const body = await req.json();
     const parsed = WorkoutSchema.safeParse(body);
 
@@ -67,13 +61,11 @@ export async function PUT(
 }
 
 // DELETE /api/workouts/[id]
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: NextRequest, context: unknown) {
+  const { id } = (context as { params: { id: string } }).params;
+
   try {
     await dbConnect();
-    const { id } = await params;
 
     const deleted = await Workout.findByIdAndDelete(id);
 

@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export function ProgressSummary() {
+export default function ProgressSummary() {
   const [total, setTotal] = useState<number | null>(null);
   const [latest, setLatest] = useState<string | null>(null);
   const router = useRouter();
