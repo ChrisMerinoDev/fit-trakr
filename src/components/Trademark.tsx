@@ -3,7 +3,7 @@ import Image from 'next/image';
 export default function Trademark() {
   return (
     <main className="w-full h-full flex justify-center">
-      <div className="absolute bottom-6">
+      <div className="absolute bottom-1.5">
         <div className="flex justify-center items-center gap-1">
           <a href="http://instagram.com/chris_merino_">
             <Image
