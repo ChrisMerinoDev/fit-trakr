@@ -6,13 +6,14 @@ import { PageProps } from '@/types';
 import { WorkoutDetailClient } from './WorkoutDetailClient';
 
 export default async function WorkoutDetailPage({ params }: PageProps) {
+  const resolvedParams = await params;
   await dbConnect();
   const user = await getAuthUser();
 
   if ('error' in user) return notFound();
 
   const workout = await Workout.findOne({
-    _id: params,
+    _id: resolvedParams.id,
     createdBy: user.userId,
   });
 
