@@ -2,16 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '../../../../../lib/mongoose';
 import Workout from '../../../../../models/workout.model';
 import { WorkoutSchema } from '../../../../../lib/validations';
+import { getAuthUser } from '../../../../../lib/auth';
+import { APIProps } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
 // GET /api/workouts/[id]
-export async function GET(req: NextRequest, context: unknown) {
-  const { id } = await (context as { params: { id: string } }).params;
+export async function GET(req: NextRequest, { params }: APIProps) {
   try {
     await dbConnect();
+    const user = await getAuthUser();
 
-    const workout = await Workout.findById(id);
+    if ('error' in user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const workout = await Workout.findOne({
+      _id: params,
+      createdBy: user.userId,
+    });
 
     if (!workout) {
       return NextResponse.json({ error: 'Workout not found' }, { status: 404 });
@@ -19,15 +28,20 @@ export async function GET(req: NextRequest, context: unknown) {
 
     return NextResponse.json({ workout });
   } catch (error) {
-    console.error(error);
+    console.error('[GET WORKOUT ERROR]', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
 
 // PUT /api/workouts/[id]
-export async function PUT(req: NextRequest, context: unknown) {
-  const { id } = (context as { params: { id: string } }).params;
+export async function PUT(req: NextRequest, { params }: APIProps) {
   try {
+    const user = await getAuthUser();
+
+    if ('error' in user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const parsed = WorkoutSchema.safeParse(body);
 
@@ -40,9 +54,9 @@ export async function PUT(req: NextRequest, context: unknown) {
 
     await dbConnect();
 
-    const updatedWorkout = await Workout.findByIdAndUpdate(
-      id,
-      { ...parsed.data },
+    const updatedWorkout = await Workout.findOneAndUpdate(
+      { _id: params, createdBy: user.userId },
+      parsed.data,
       { new: true }
     );
 
@@ -55,19 +69,25 @@ export async function PUT(req: NextRequest, context: unknown) {
       workout: updatedWorkout,
     });
   } catch (error) {
-    console.error('Failed to update workout:', error);
+    console.error('[UPDATE WORKOUT ERROR]', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
 
 // DELETE /api/workouts/[id]
-export async function DELETE(req: NextRequest, context: unknown) {
-  const { id } = (context as { params: { id: string } }).params;
-
+export async function DELETE(req: NextRequest, { params }: APIProps) {
   try {
     await dbConnect();
+    const user = await getAuthUser();
 
-    const deleted = await Workout.findByIdAndDelete(id);
+    if ('error' in user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const deleted = await Workout.findOneAndDelete({
+      _id: params,
+      createdBy: user.userId,
+    });
 
     if (!deleted) {
       return NextResponse.json({ error: 'Workout not found' }, { status: 404 });
@@ -75,7 +95,7 @@ export async function DELETE(req: NextRequest, context: unknown) {
 
     return NextResponse.json({ message: 'Workout deleted successfully' });
   } catch (error) {
-    console.error('Failed to delete workout:', error);
+    console.error('[DELETE WORKOUT ERROR]', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
