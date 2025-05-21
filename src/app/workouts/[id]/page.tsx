@@ -1,27 +1,32 @@
-// (Server Component)
+import dbConnect from '../../../../lib/mongoose';
+import Workout from '../../../../models/workout.model';
+import { getAuthUser } from '../../../../lib/auth';
 import { notFound } from 'next/navigation';
-import { WorkoutDetailClient } from './WorkoutDetailClient';
 import { PageProps } from '@/types';
+import { WorkoutDetailClient } from './WorkoutDetailClient';
 
 export default async function WorkoutDetailPage({ params }: PageProps) {
-  const resolvedParams = await params;
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/workouts/${resolvedParams.id}`,
-    { cache: 'no-store' }
-  );
+  await dbConnect();
+  const user = await getAuthUser();
 
-  if (!res.ok) return notFound();
+  if ('error' in user) return notFound();
 
-  const data = await res.json();
-  const workout = {
-    id: data.workout._id,
-    title: data.workout.title,
-    exercises: data.workout.exercises,
-  };
+  const workout = await Workout.findOne({
+    _id: params,
+    createdBy: user.userId,
+  });
+
+  if (!workout) return notFound();
 
   return (
     <div>
-      <WorkoutDetailClient workout={workout} />
+      <WorkoutDetailClient
+        workout={{
+          id: workout._id.toString(),
+          title: workout.title,
+          exercises: workout.exercises,
+        }}
+      />
     </div>
   );
 }
