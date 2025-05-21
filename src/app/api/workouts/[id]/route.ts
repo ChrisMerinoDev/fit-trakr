@@ -9,6 +9,7 @@ export const dynamic = 'force-dynamic';
 
 // GET /api/workouts/[id]
 export async function GET(req: NextRequest, { params }: APIProps) {
+  const resolvedParams = await params;
   try {
     await dbConnect();
     const user = await getAuthUser();
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest, { params }: APIProps) {
     }
 
     const workout = await Workout.findOne({
-      _id: params,
+      _id: resolvedParams,
       createdBy: user.userId,
     });
 
@@ -35,6 +36,7 @@ export async function GET(req: NextRequest, { params }: APIProps) {
 
 // PUT /api/workouts/[id]
 export async function PUT(req: NextRequest, { params }: APIProps) {
+  const resolvedParams = await params;
   try {
     const user = await getAuthUser();
 
@@ -55,7 +57,7 @@ export async function PUT(req: NextRequest, { params }: APIProps) {
     await dbConnect();
 
     const updatedWorkout = await Workout.findOneAndUpdate(
-      { _id: params, createdBy: user.userId },
+      { _id: resolvedParams, createdBy: user.userId },
       parsed.data,
       { new: true }
     );
@@ -76,6 +78,7 @@ export async function PUT(req: NextRequest, { params }: APIProps) {
 
 // DELETE /api/workouts/[id]
 export async function DELETE(req: NextRequest, { params }: APIProps) {
+  const resolvedParams = await params;
   try {
     await dbConnect();
     const user = await getAuthUser();
@@ -85,7 +88,7 @@ export async function DELETE(req: NextRequest, { params }: APIProps) {
     }
 
     const deleted = await Workout.findOneAndDelete({
-      _id: params,
+      _id: resolvedParams,
       createdBy: user.userId,
     });
 
