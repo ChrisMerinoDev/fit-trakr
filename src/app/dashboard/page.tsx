@@ -4,7 +4,6 @@ import { AddWorkout } from '@/components/AddWorkout';
 import { SeeWorkouts } from '@/components/SeeWorkouts';
 import { ProgressCheck } from '@/components/ProgressCheck';
 import LogoutButton from '@/components/LogoutButton';
-import Image from 'next/image';
 
 export default async function DashboardPage() {
   const user = await getAuthUser();
