@@ -11,7 +11,7 @@ export const SeeWorkouts = () => {
     <div>
       <button
         onClick={() => router.push(ROUTES.WORKOUTS)}
-        className="bg-rose-600 hover:bg-rose-700 text-white cursor-pointe shadow-sm  hover:cursor-pointer py-5 px-10 rounded-xl"
+        className="bg-rose-600 hover:bg-rose-700 text-white cursor-pointe shadow-sm  hover:cursor-pointer py-5 px-5 rounded-xl"
       >
         <div className="flex hover:animate-pulse">
           <Image
@@ -24,7 +24,7 @@ export const SeeWorkouts = () => {
           />
           <div className="ml-2">
             <p>
-              <span className="text-white text-xl">See all Workouts</span>
+              <span className="text-white text-xl">See all your Workouts</span>
             </p>
           </div>
         </div>

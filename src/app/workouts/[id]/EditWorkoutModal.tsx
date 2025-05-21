@@ -72,7 +72,7 @@ export function EditWorkoutModal({ workout, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 backdrop-blur-xl bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-2xl">
+      <div className="bg-white rounded-lg p-6 mx-5 w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-2xl">
         <h2 className="text-xl font-semibold mb-4 text-rose-600">
           Edit current workout
         </h2>
@@ -117,7 +117,7 @@ export function EditWorkoutModal({ workout, onClose }: Props) {
             </div>
             <button
               onClick={() => handleRemoveExercise(index)}
-              className="text-red-500 text-sm hover:underline mt-1"
+              className="text-red-500 text-sm hover:underline mt-1 hover:cursor-pointer"
             >
               Remove Exercise
             </button>
@@ -126,7 +126,7 @@ export function EditWorkoutModal({ workout, onClose }: Props) {
 
         <button
           onClick={handleAddExercise}
-          className="text-blue-600 hover:underline text-sm mb-4"
+          className="text-blue-600 hover:underline text-sm mb-4 hover:cursor-pointer"
         >
           + Add another exercise
         </button>
@@ -134,14 +134,14 @@ export function EditWorkoutModal({ workout, onClose }: Props) {
         <div className="flex justify-between mt-4">
           <button
             onClick={onClose}
-            className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+            className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded hover:cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded"
+            className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded hover:cursor-pointer"
           >
             {loading ? 'Saving...' : 'Save Changes'}
           </button>

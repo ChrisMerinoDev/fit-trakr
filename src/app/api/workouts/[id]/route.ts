@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 // GET /api/workouts/[id]
 export async function GET(req: NextRequest, context: unknown) {
-  const { id } = (context as { params: { id: string } }).params;
+  const { id } = await (context as { params: { id: string } }).params;
   try {
     await dbConnect();
 

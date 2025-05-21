@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
 import { Toaster } from 'react-hot-toast';
-import Trademark from '@/components/Trademark';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,9 +34,6 @@ export default function RootLayout({
       >
         <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
         {children}
-        <div>
-          <Trademark />
-        </div>
       </body>
     </html>
   );

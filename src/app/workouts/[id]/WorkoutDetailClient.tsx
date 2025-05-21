@@ -42,17 +42,21 @@ export function WorkoutDetailClient({ workout }: { workout: Workout }) {
     <main className="min-h-screen bg-stone-50 px-4 py-10">
       <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-200">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-rose-600">{workout.title}</h1>
+          <h1>
+            <span className="flex text-3xl font-bold text-rose-600">
+              {workout.title}
+            </span>
+          </h1>
           <div className="space-x-2">
             <button
               onClick={() => setShowEditModal(true)}
-              className="bg-stone-200 text-stone-700 px-2 py-1 rounded hover:bg-stone-500 hover:text-white hover:cursor-pointer text-sm"
+              className="bg-stone-200 text-stone-700 px-2 py-1 rounded hover:bg-stone-500 hover:text-white hover:cursor-pointer text-md"
             >
               Edit
             </button>
             <button
               onClick={() => setShowDeleteModal(true)}
-              className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 hover:cursor-pointer text-sm"
+              className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 hover:cursor-pointer text-md"
             >
               Delete
             </button>
@@ -60,7 +64,9 @@ export function WorkoutDetailClient({ workout }: { workout: Workout }) {
         </div>
 
         {workout.exercises.length === 0 ? (
-          <p className="text-gray-600">No exercises added yet.</p>
+          <p>
+            <span className="text-gray-600">No exercises added yet.</span>
+          </p>
         ) : (
           <ul className="space-y-4">
             {workout.exercises.map((ex, index) => (

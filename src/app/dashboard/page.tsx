@@ -4,6 +4,7 @@ import { AddWorkout } from '@/components/AddWorkout';
 import { SeeWorkouts } from '@/components/SeeWorkouts';
 import { ProgressCheck } from '@/components/ProgressCheck';
 import LogoutButton from '@/components/LogoutButton';
+import Trademark from '@/components/Trademark';
 
 export default async function DashboardPage() {
   const user = await getAuthUser();
@@ -28,6 +29,9 @@ export default async function DashboardPage() {
           <LogoutButton />
         </div>
       </section>
+      <footer className="absolute bottom-1">
+        <Trademark />
+      </footer>
     </main>
   );
 }
