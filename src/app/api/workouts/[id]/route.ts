@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 // GET /api/workouts/[id]
 export async function GET(req: NextRequest, { params }: APIParams) {
-  const id = params.id;
+  const id = await params.id;
 
   try {
     await dbConnect();
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest, { params }: APIParams) {
 
 // PUT /api/workouts/[id]
 export async function PUT(req: NextRequest, { params }: APIParams) {
-  const id = params.id;
+  const id = await params.id;
 
   try {
     const user = await getAuthUser();
@@ -80,7 +80,7 @@ export async function PUT(req: NextRequest, { params }: APIParams) {
 
 // DELETE /api/workouts/[id]
 export async function DELETE(req: NextRequest, { params }: APIParams) {
-  const id = params.id;
+  const id = await params.id;
 
   try {
     await dbConnect();
