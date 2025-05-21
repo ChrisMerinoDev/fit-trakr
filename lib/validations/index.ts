@@ -7,8 +7,8 @@ export const WorkoutSchema = z.object({
     .array(
       z.object({
         name: z.string().min(1, 'Exercise name is required'),
-        sets: z.string().min(1, 'Sets required'),
-        reps: z.string().min(1, 'Reps required'),
+        sets: z.union([z.string().min(1, 'Sets required'), z.number()]),
+        reps: z.union([z.string().min(1, 'Reps required'), z.number()]),
       })
     )
     .nonempty('At least one exercise is required.'),

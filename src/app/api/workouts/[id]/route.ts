@@ -18,8 +18,7 @@ export async function GET(req: NextRequest, { params }: APIProps) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const workout = await Workout.findOne({
-      _id: resolvedParams,
+    const workout = await Workout.findOne(resolvedParams, {
       createdBy: user.userId,
     });
 
@@ -57,8 +56,8 @@ export async function PUT(req: NextRequest, { params }: APIProps) {
     await dbConnect();
 
     const updatedWorkout = await Workout.findOneAndUpdate(
-      { _id: resolvedParams, createdBy: user.userId },
-      parsed.data,
+      resolvedParams,
+      { ...parsed.data },
       { new: true }
     );
 
@@ -87,8 +86,7 @@ export async function DELETE(req: NextRequest, { params }: APIProps) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const deleted = await Workout.findOneAndDelete({
-      _id: resolvedParams,
+    const deleted = await Workout.findOneAndDelete(resolvedParams, {
       createdBy: user.userId,
     });
 
