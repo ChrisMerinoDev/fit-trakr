@@ -11,10 +11,17 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const parsed = AccountSchema.safeParse(body);
+    // Trim input before validating
+    const parsed = AccountSchema.safeParse({
+      name: body.name?.trim(),
+      username: body.username?.trim(),
+      email: body.email?.trim(),
+      password: body.password,
+    });
+
     if (!parsed.success) {
       return NextResponse.json(
-        { error: parsed.error.flatten() },
+        { error: parsed.error.flatten().fieldErrors },
         { status: 400 }
       );
     }
@@ -30,7 +37,12 @@ export async function POST(req: Request) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'Username or email already in use.' },
+        {
+          error: {
+            username: ['Username or email already in use.'],
+            email: ['Username or email already in use.'],
+          },
+        },
         { status: 409 }
       );
     }
@@ -44,7 +56,6 @@ export async function POST(req: Request) {
       password: hashedPassword,
     });
 
-    // ✅ Generate a token
     const token = jwt.sign(
       { id: newUser._id, username: newUser.username },
       JWT_SECRET,
@@ -58,7 +69,7 @@ export async function POST(req: Request) {
         username: newUser.username,
         email: newUser.email,
       },
-      token, // ✅ include token
+      token,
     });
   } catch (error) {
     console.error('Sign-up error:', error);

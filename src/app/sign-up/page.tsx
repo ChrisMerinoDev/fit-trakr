@@ -5,6 +5,10 @@ import toast from 'react-hot-toast';
 import ROUTES from '../../../constants/routes';
 import { useRouter } from 'next/navigation';
 
+type FieldErrors = Partial<
+  Record<'name' | 'username' | 'email' | 'password', string[]>
+>;
+
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
     name: '',
@@ -12,10 +16,13 @@ export default function SignUpPage() {
     email: '',
     password: '',
   });
+
+  const [errors, setErrors] = useState<FieldErrors>({});
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
 
     const res = await fetch('/api/auth/sign-up', {
       method: 'POST',
@@ -23,21 +30,14 @@ export default function SignUpPage() {
       body: JSON.stringify(formData),
     });
 
-    type SignUpResponse = {
-      token: string;
-      user: {
-        id: string;
-        username: string;
-        email: string;
-      };
-      message: string;
-      error?: string;
-    };
-
-    const data: SignUpResponse = await res.json();
+    const data = await res.json();
 
     if (!res.ok) {
-      toast.error(data.error || 'Something went wrong');
+      if (data.error && typeof data.error === 'object') {
+        setErrors(data.error); // Zod field errors
+      } else {
+        toast.error(data.error || 'Something went wrong');
+      }
       return;
     }
 
@@ -52,6 +52,7 @@ export default function SignUpPage() {
         <h1 className="mb-6 text-center">Sign Up</h1>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
+          {/* Name */}
           <div>
             <label className="block text-md font-medium text-slate-700 mb-2">
               Name
@@ -63,10 +64,14 @@ export default function SignUpPage() {
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              className="w-full px-4 py-2 rounded-md bg-slate-100 text-black focus:outline-none focus:ring-2 focus:ring-slate-200"
+              className="w-full px-4 py-2 rounded-md bg-slate-100"
             />
+            {errors.name && (
+              <p className="text-sm text-red-600 mt-1">{errors.name[0]}</p>
+            )}
           </div>
 
+          {/* Username */}
           <div>
             <label className="block text-md font-medium text-slate-700 mb-2">
               Username
@@ -78,10 +83,14 @@ export default function SignUpPage() {
               onChange={(e) =>
                 setFormData({ ...formData, username: e.target.value })
               }
-              className="w-full px-4 py-2 rounded-md bg-slate-100 text-black focus:outline-none focus:ring-2 focus:ring-slate-200"
+              className="w-full px-4 py-2 rounded-md bg-slate-100"
             />
+            {errors.username && (
+              <p className="text-sm text-red-600 mt-1">{errors.username[0]}</p>
+            )}
           </div>
 
+          {/* Email */}
           <div>
             <label className="block text-md font-medium text-slate-700 mb-2">
               Email
@@ -93,10 +102,14 @@ export default function SignUpPage() {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="w-full px-4 py-2 rounded-md bg-slate-100 text-black focus:outline-none focus:ring-2 focus:ring-slate-200"
+              className="w-full px-4 py-2 rounded-md bg-slate-100"
             />
+            {errors.email && (
+              <p className="text-sm text-red-600 mt-1">{errors.email[0]}</p>
+            )}
           </div>
 
+          {/* Password */}
           <div>
             <label className="block text-md font-medium text-slate-700 mb-2">
               Password
@@ -108,8 +121,11 @@ export default function SignUpPage() {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="w-full px-4 py-2 rounded-md bg-slate-100 text-black focus:outline-none focus:ring-2 focus:ring-slate-200"
+              className="w-full px-4 py-2 rounded-md bg-slate-100"
             />
+            {errors.password && (
+              <p className="text-sm text-red-600 mt-1">{errors.password[0]}</p>
+            )}
           </div>
 
           <button type="submit" className="w-full mt-4 button">

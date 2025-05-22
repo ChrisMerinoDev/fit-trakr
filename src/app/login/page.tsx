@@ -5,14 +5,27 @@ import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ROUTES from '../../../constants/routes';
+import { LoginSchema } from '../../../lib/validations';
+
+type FieldErrors = Partial<Record<'email' | 'password', string[]>>;
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<FieldErrors>({});
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
+    const validation = LoginSchema.safeParse({ email, password });
+
+    if (!validation.success) {
+      const fieldErrors = validation.error.flatten().fieldErrors;
+      setErrors(fieldErrors);
+      return;
+    }
 
     const res = await fetch('/api/auth/login', {
       method: 'POST',
@@ -20,25 +33,14 @@ export default function LoginPage() {
       body: JSON.stringify({ email, password }),
     });
 
-    type LoginResponse = {
-      token: string;
-      user: {
-        id: string;
-        username: string;
-        email: string;
-      };
-      message: string;
-      error?: string;
-    };
-
-    const data: LoginResponse = await res.json();
+    const data = await res.json();
 
     if (!res.ok) {
       toast.error(data.error || 'Login failed');
       return;
     }
 
-    toast.success('Login sucessful!');
+    toast.success('Login successful!');
     router.push(ROUTES.DASHBOARD);
   };
 
@@ -57,8 +59,11 @@ export default function LoginPage() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-slate-100 text-black focus:outline-none focus:ring-2 focus:ring-slate-200"
+              className="w-full px-4 py-2 rounded-md bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200"
             />
+            {errors.email && (
+              <p className="text-sm text-red-600 mt-1">{errors.email[0]}</p>
+            )}
           </div>
 
           <div>
@@ -70,8 +75,11 @@ export default function LoginPage() {
               placeholder="•••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-slate-100 text-black focus:outline-none focus:ring-2 focus:ring-slate-200"
+              className="w-full px-4 py-2 rounded-md bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200"
             />
+            {errors.password && (
+              <p className="text-sm text-red-600 mt-1">{errors.password[0]}</p>
+            )}
           </div>
 
           <button type="submit" className="w-full mt-4 button">

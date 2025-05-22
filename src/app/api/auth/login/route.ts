@@ -9,7 +9,12 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const parsed = LoginSchema.safeParse(body);
+    // Trim email before validation
+    const parsed = LoginSchema.safeParse({
+      email: body.email?.trim(),
+      password: body.password,
+    });
+
     if (!parsed.success) {
       return NextResponse.json(
         { error: parsed.error.flatten() },
@@ -42,7 +47,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ Sign the JWT
     const token = signToken({
       id: existingUser._id,
       email: existingUser.email,
