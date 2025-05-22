@@ -12,6 +12,6 @@ export interface APIParams {
   };
 }
 
-export interface APIProps {
-  params: Promise<APIParams>;
-}
+// export interface APIProps {
+//   params: Promise<APIParams>;
+// }

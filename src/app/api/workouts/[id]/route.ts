@@ -3,12 +3,14 @@ import dbConnect from '../../../../../lib/mongoose';
 import Workout from '../../../../../models/workout.model';
 import { WorkoutSchema } from '../../../../../lib/validations';
 import { getAuthUser } from '../../../../../lib/auth';
-import { APIProps } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
 // GET /api/workouts/[id]
-export async function GET(req: NextRequest, { params }: APIProps) {
+export async function GET(req: NextRequest, context: unknown) {
+  const { params } = context as { params: { id: string } };
+  const id = params.id;
+
   try {
     await dbConnect();
     const user = await getAuthUser();
@@ -18,7 +20,7 @@ export async function GET(req: NextRequest, { params }: APIProps) {
     }
 
     const workout = await Workout.findOne({
-      _id: (await params).params.id,
+      _id: id,
       createdBy: user.userId,
     });
 
@@ -34,7 +36,10 @@ export async function GET(req: NextRequest, { params }: APIProps) {
 }
 
 // PUT /api/workouts/[id]
-export async function PUT(req: NextRequest, { params }: APIProps) {
+export async function PUT(req: NextRequest, context: unknown) {
+  const { params } = context as { params: { id: string } };
+  const id = params.id;
+
   try {
     const user = await getAuthUser();
 
@@ -55,7 +60,7 @@ export async function PUT(req: NextRequest, { params }: APIProps) {
     await dbConnect();
 
     const updatedWorkout = await Workout.findOneAndUpdate(
-      { _id: (await params).params.id, createdBy: user.userId },
+      { _id: id, createdBy: user.userId },
       parsed.data,
       { new: true }
     );
@@ -75,7 +80,10 @@ export async function PUT(req: NextRequest, { params }: APIProps) {
 }
 
 // DELETE /api/workouts/[id]
-export async function DELETE(req: NextRequest, { params }: APIProps) {
+export async function DELETE(req: NextRequest, context: unknown) {
+  const { params } = context as { params: { id: string } };
+  const id = params.id;
+
   try {
     await dbConnect();
     const user = await getAuthUser();
@@ -85,7 +93,7 @@ export async function DELETE(req: NextRequest, { params }: APIProps) {
     }
 
     const deleted = await Workout.findOneAndDelete({
-      _id: (await params).params.id,
+      _id: id,
       createdBy: user.userId,
     });
 
