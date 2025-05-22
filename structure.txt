@@ -1,0 +1,63 @@
+.
+├── README.md
+├── components.json
+├── constants
+│   └── routes.ts
+├── eslint.config.mjs
+├── lib
+│   ├── auth.ts
+│   ├── hash.ts
+│   ├── mongoose.ts
+│   └── validations
+│       └── index.ts
+├── models
+│   ├── user.model.ts
+│   └── workout.model.ts
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public
+│   ├── Icons
+│   │   ├── Add.svg
+│   │   ├── Add2.svg
+│   │   ├── Exercise.svg
+│   │   ├── Exercise2.svg
+│   │   ├── IGICON.svg
+│   │   ├── IGICON2.svg
+│   │   ├── Progress.svg
+│   │   ├── Progress2.svg
+│   │   └── SeeWorkouts.svg
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── preview-dashboard.png
+│   ├── preview-workout-details.png
+│   ├── vercel.svg
+│   └── window.svg
+├── src
+│   ├── app
+│   │   ├── api
+│   │   ├── dashboard
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   ├── login
+│   │   ├── page.tsx
+│   │   ├── sign-up
+│   │   └── workouts
+│   ├── components
+│   │   ├── AddWorkout.tsx
+│   │   ├── LogoutButton.tsx
+│   │   ├── ProgressCheck.tsx
+│   │   ├── SeeWorkouts.tsx
+│   │   ├── Trademark.tsx
+│   │   └── ui
+│   ├── lib
+│   │   └── utils.ts
+│   └── types
+│       └── index.ts
+├── structure.txt
+└── tsconfig.json
+
+18 directories, 43 files
