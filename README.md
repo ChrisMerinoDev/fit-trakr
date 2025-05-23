@@ -108,8 +108,9 @@
 1. **Clone the repo**
 
 ```bash
-git clone https://github.com/your-username/fittrakr.git
-cd fittrakr
+git clone https://github.com/ChrisMerinoDev/fit-trakr.git
+cd fit-trakr
+
 ```
 
 2. **Install dependencies**
