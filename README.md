@@ -110,7 +110,6 @@
 ```bash
 git clone https://github.com/ChrisMerinoDev/fit-trakr.git
 cd fit-trakr
-
 ```
 
 2. **Install dependencies**
@@ -133,6 +132,8 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```bash
 npm run dev
 ```
+
+---
 
 ## ✅ Upcoming Improvements
 
